@@ -11,6 +11,10 @@ class ConsoleRenderer:
         'T': '\033[90m',   # Test color
     }
     RESET = '\033[0m'
+    FACE_SEPARATOR = ' '  # Placeholder for spacing between faces
+    FACE_SPACING = '  '   # Actual double space between faces
+    FACE_INDENT = "       "  # Indentation for U and D faces
+    MIDDLE_FACES = ['L', 'F', 'R', 'B']  # Faces displayed in middle row
     
     @staticmethod
     def colorize(color_code):
@@ -50,28 +54,29 @@ class ConsoleRenderer:
         result = ""
         
         # Upper face (U) - indented
-        result += ConsoleRenderer.format_face(state['U'], "       ")
+        result += ConsoleRenderer.format_face(state['U'], ConsoleRenderer.FACE_INDENT)
         
         # Middle section - L, F, R, B side by side
         for i in range(3):
             row_cells = []
-            for face in ['L', 'F', 'R', 'B']:
+            for idx, face in enumerate(ConsoleRenderer.MIDDLE_FACES):
                 row_start = i * 3
                 row_cells.extend(state[face][row_start:row_start + 3])
-                if face != 'B':  # Add spacing between faces except after last
-                    row_cells.append(' ')  # Placeholder for spacing
+                # Add spacing between faces except after last
+                if idx < len(ConsoleRenderer.MIDDLE_FACES) - 1:
+                    row_cells.append(ConsoleRenderer.FACE_SEPARATOR)
             
             # Format with proper spacing
             formatted = []
-            for j, cell in enumerate(row_cells):
-                if cell == ' ':
-                    formatted.append('  ')  # Double space for face separation
+            for cell in row_cells:
+                if cell == ConsoleRenderer.FACE_SEPARATOR:
+                    formatted.append(ConsoleRenderer.FACE_SPACING)
                 else:
                     formatted.append(ConsoleRenderer.format_cell(cell))
             result += f"{''.join(formatted)}\n"
         
         # Lower face (D) - indented
-        result += ConsoleRenderer.format_face(state['D'], "       ")
+        result += ConsoleRenderer.format_face(state['D'], ConsoleRenderer.FACE_INDENT)
         
         return result
 

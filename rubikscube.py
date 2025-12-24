@@ -151,17 +151,25 @@ class RubiksCube:
         faces, indices = self.ROTATION_CONFIGS['S']
         self.rotate_single_ring(faces, indices)
 
+    def _repeat_rotation(self, rotation_func, times):
+        """Helper method to repeat a rotation multiple times.
+        
+        Args:
+            rotation_func: The rotation method to call
+            times: Number of times to repeat the rotation
+        """
+        for _ in range(times):
+            rotation_func()
+
     def rotate_r(self):
         """Rotate right face and middle layer (wide move)."""
         self.rotate_R()
-        for i in range(3):
-            self.rotate_M()
+        self._repeat_rotation(self.rotate_M, 3)
 
     def rotate_u(self):
         """Rotate upper face and middle layer (wide move)."""
         self.rotate_U()
-        for i in range(3):
-            self.rotate_E()
+        self._repeat_rotation(self.rotate_E, 3)
 
     def rotate_f(self):
         """Rotate front face and middle layer (wide move)."""
@@ -176,8 +184,7 @@ class RubiksCube:
     def rotate_b(self):
         """Rotate back face and middle layer (wide move)."""
         self.rotate_B()
-        for i in range(3):
-            self.rotate_S()
+        self._repeat_rotation(self.rotate_S, 3)
 
     def rotate_d(self):
         """Rotate down face and middle layer (wide move)."""
@@ -187,17 +194,14 @@ class RubiksCube:
     def rotate_x(self):
         """Rotate entire cube on R axis."""
         self.rotate_r()
-        for i in range(3):
-            self.rotate_L()
+        self._repeat_rotation(self.rotate_L, 3)
 
     def rotate_y(self):
         """Rotate entire cube on U axis."""
         self.rotate_u()
-        for i in range(3):
-            self.rotate_D()
+        self._repeat_rotation(self.rotate_D, 3)
 
     def rotate_z(self):
         """Rotate entire cube on F axis."""
         self.rotate_f()
-        for i in range(3):
-            self.rotate_B()
+        self._repeat_rotation(self.rotate_B, 3)
